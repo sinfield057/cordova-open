@@ -11,11 +11,18 @@ import android.content.Intent;
 import android.webkit.MimeTypeMap;
 import android.content.ActivityNotFoundException;
 import android.os.Build;
+import android.support.v4.content.FileProvider;
+import java.io.File;
+import android.content.Context;
 
 /**
  * This class starts an activity for an intent to view files
  */
 public class Open extends CordovaPlugin {
+
+  public class GenericFileProvider extends FileProvider {
+    // Extending the FileProvider class to avoid problems with the AndroidManifest.mxl file
+  }
 
   public static final String OPEN_ACTION = "open";
 
@@ -41,7 +48,8 @@ public class Open extends CordovaPlugin {
     String extension = MimeTypeMap.getFileExtensionFromUrl(path);
     if (extension != null) {
       MimeTypeMap mime = MimeTypeMap.getSingleton();
-      mimeType = mime.getMimeTypeFromExtension(extension.toLowerCase());
+      String ext = path.substring(path.lastIndexOf(".") + 1);
+      mimeType = mime.getMimeTypeFromExtension(ext);
     }
 
     System.out.println("Mime type: " + mimeType);
@@ -56,11 +64,29 @@ public class Open extends CordovaPlugin {
    * @param callbackContext
    */
   private void chooseIntent(String path, CallbackContext callbackContext) {
+
+    Context currentContext = this.cordova.getActivity().getApplicationContext();
+
     if (path != null && path.length() > 0) {
+      // Getting rid of uri prefix
+      path = path.replaceFirst("file://", "");
+      path = path.replaceFirst("file:/", "");
+
+      Uri uri = null;
+
+      // The 'uri' variable recieves a value based on the current SDK
+      if(Build.VERSION.SDK_INT >= 24){
+        File file = new File(path);
+        uri = GenericFileProvider.getUriForFile(currentContext, currentContext.getPackageName() + ".provider", file);
+      } else {
+        uri = Uri.parse("file://" + path);
+      }
+
       try {
-        Uri uri = Uri.parse(path);
         String mime = getMimeType(path);
         Intent fileIntent = new Intent(Intent.ACTION_VIEW);
+        // Important to add, else apps that are trying to open the file would crash
+        fileIntent.addFlags( Intent.FLAG_GRANT_READ_URI_PERMISSION );
 
         if( Build.VERSION.SDK_INT > 15 ){
           fileIntent.setDataAndTypeAndNormalize(uri, mime); // API Level 16 -> Android 4.1
