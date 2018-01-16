@@ -2,7 +2,7 @@ cordova-open
 ====
 
 Disclosure:
-I have never developed in Java or Android before. This is just a small modification to the original repository so that it would work with SDK versions greater than 24. The change is also targeted at a specific need in a different project. I do not guarantee that it will work in absolutely all cases. Use at your own peril. Or modify it yourself, which would be even better.
+I have never developed in Java or Android before. This is just a small modification to the original repository so that it would work with Android SDK versions greater than 24. The change is also targeted at a specific need in a different project. I do not guarantee that it will work in absolutely all cases. Use at your own peril. Or modify it yourself, which would be even better.
 
 Make sure the following lines are present in your AndroidManifest.xml file:
 ```javascript
