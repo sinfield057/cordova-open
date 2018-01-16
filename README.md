@@ -1,11 +1,23 @@
 cordova-open
 ====
 
-[![Build Status](https://travis-ci.org/disusered/cordova-open.svg)](https://travis-ci.org/disusered/cordova-open) [![Code Climate](https://codeclimate.com/github/disusered/cordova-open/badges/gpa.svg)](https://codeclimate.com/github/disusered/cordova-open) 
+Disclosure:
+I have never developed in Java or Android before. This is just a small modification to the original repository so that it would work with SDK versions greater than 24. The change is also targeted at a specific need in a different project. I do not guarantee that it will work in absolutely all cases. Use at your own peril. Or modify it yourself, which would be even better.
 
-> Open audio, video, images and more with applications installed on the user's device.
+Make sure the following lines are present in your AndroidManifest.xml file:
+```javascript
+<provider android:authorities="${applicationId}.provider" android:exported="false" android:grantUriPermissions="true" android:name="android.support.v4.content.FileProvider">
+      <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider_paths"/>
+</provider>
 
-<img src="https://raw.githubusercontent.com/disusered/cordova-open/docs/open.png" width="300px" />
+<provider android:authorities="${applicationId}.provider" android:exported="false" android:grantUriPermissions="true" android:name=".GenericFileProvider">
+      <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider_paths"/>
+</provider>
+```
+
+
+This repository is a fork of https://github.com/disusered/cordova-open.
+
 
 ## Install
 
