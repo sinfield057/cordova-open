@@ -22,7 +22,7 @@ This repository is a fork of https://github.com/disusered/cordova-open.
 ## Install
 
 ```bash
-$ cordova plugin add cordova-open
+$ cordova plugin add https://github.com/sinfield057/cordova-open.git
 ```
 
 ## Usage
